@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sot-executor-api
+  labels:
+    app: sot-executor-api
+    service: pai
+    role: backend
+spec:
+  replicas: 1 # Number of pods running with the same image at any point in time
+  template:
+    metadata:
+      name: sot-executor-api
+      labels:
+        app: sot-executor-api # Label we’ll use to access app later on
+        role: backend
+        env: dev
+    spec:
+      volumes:
+        - name: google-cloud-key
+          hostPath:
+            path: /Users/davidainslie/.config/gcloud
+            type: Directory
+      containers:
+        - name: sot-executor-api
+          image: gcr.io/bi-crm-poc/parallelai/sot_executor_api:develop.55
+          ports:
+            - containerPort: 8880 # Port exposed by the container
+          volumeMounts:
+            - name: google-cloud-key
+              mountPath: /gcloud
+              readOnly: true
+          env:
+            - name: PORT
+              value: "8880"
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /gcloud/application_default_credentials
+          resources:
+            limits:
+              memory: 1Gi
+              cpu: 100m
+          imagePullPolicy: IfNotPresent
+      #dnsPolicy: ClusterFirst
+      #restartPolicy: Always
+      #securityContext: {}
+      #terminationGracePeriodSeconds: 30

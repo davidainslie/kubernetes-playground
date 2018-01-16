@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mongo
+spec:
+  replicas: 1 # Number of pods running with the same image at any point in time
+  template:
+    metadata:
+      labels:
+        app: mongo # Label we’ll use to access app later on
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:latest # Name of the image. This image is accessible through Docker hub
+          ports:
+            - containerPort: 27017 # Port exposed by the container
+          env:
+          - name: PORT
+            value: "27017"

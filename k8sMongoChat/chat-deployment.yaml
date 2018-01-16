@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: chat
+spec:
+  replicas: 1 # Number of pods running with the same image at any point in time
+  template:
+    metadata:
+      labels:
+        app: chat # Label we’ll use to access app later on
+    spec:
+      containers:
+        - name: chat
+          image: containers101/demochat:2.0 # Name of the image. This image is accessible through Docker hub
+          ports:
+            - containerPort: 5000 # Port exposed by the container
+          env:
+          - name: PORT
+            value: "5000"

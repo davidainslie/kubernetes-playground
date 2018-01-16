@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sot-executor-api
+  labels:
+    app: sot-executor-api
+    service: pai
+spec:
+  selector:
+    app: sot-executor-api # Label to query pods by
+    role: backend
+  type: NodePort # Important! This will expose a node port over your Kubernetes IP
+  #sessionAffinity: None
+  ports:
+    - protocol: TCP
+      port: 8880
+      targetPort: 8880
+      # nodePort: 27017 # Port you’ll use to access app through the Kubernetes IP
+      # targetPort: 27017
